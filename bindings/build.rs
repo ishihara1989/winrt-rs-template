@@ -1,10 +1,3 @@
-winrt::build!(
-    dependencies
-        os
-    types
-        windows::system::diagnostics::*
-);
- 
-fn main() {
-    build();
+ fn main() { 
+    windows::build!(windows::web::syndication::SyndicationClient);
 }

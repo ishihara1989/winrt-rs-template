@@ -1,14 +1,17 @@
-fn main() -> winrt::Result<()> {
-    use bindings::windows::system::diagnostics::*;
- 
-    for process in ProcessDiagnosticInfo::get_for_processes()? {
-        println!(
-            "id: {:5} packaged: {:5} name: {}",
-            process.process_id()?,
-            process.is_packaged()?,
-            process.executable_file_name()?
-        );
+use bindings::{ 
+    windows::foundation::Uri,
+    windows::web::syndication::SyndicationClient,
+    windows::Result,
+};
+
+fn main() -> Result<()> {
+    let uri = Uri::create_uri("https://blogs.windows.com/feed")?;
+    let client = SyndicationClient::new()?;
+    let feed = client.retrieve_feed_async(uri)?.get()?;
+
+    for item in feed.items()? {
+        println!("{}", item.title()?.text()?);
     }
- 
+
     Ok(())
 }
